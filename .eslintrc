@@ -1,0 +1,76 @@
+{
+    "env": {
+      "browser": true,
+      "commonjs": true,
+      "es2020": true,
+      "node": true
+    },
+    "extends": [
+      "plugin:import/errors",
+      "plugin:import/warnings",
+    ],
+    "rules": {
+      "import/no-unresolved": "off",
+      "import/namespace": "off",
+      "import/no-duplicates": "off",
+      "no-async-promise-executor": "off",
+      "import/named": "off",
+      "template-curly-spacing": [
+        "error",
+        "always"
+      ],
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "semi": [
+        "error",
+        "never"
+      ],
+      "curly": 2,
+      "indent": [
+        "error",
+        2
+      ],
+      "no-throw-literal": "off",
+      "no-console": [
+        "warn",
+         { "allow": ["warn", "error"] }
+      ],
+      "no-debugger": [
+        "error"
+      ],
+      "array-bracket-spacing": [
+        "error",
+        "always",
+        {
+          "singleValue": true,
+          "objectsInArrays": true,
+          "arraysInArrays": true
+        }
+      ],
+      "camelcase": [
+        "error",
+        {
+          "properties": "always"
+        }
+      ],
+      "comma-dangle": [
+        1,
+        "only-multiline"
+      ],
+      "space-in-parens": [
+        "error",
+        "always"
+      ],
+      "object-curly-spacing": [
+        "error",
+        "always"
+      ],
+      "computed-property-spacing": [
+        "error",
+        "always"
+      ],
+    },
+    "root": true
+  }

@@ -1,0 +1,21 @@
+{
+  "name": "rest-service",
+  "version": "0.1.0",
+  "description": "web services for making request with RESTfull API",
+  "main": "index.js",
+  "scripts": {
+    "index": "node ./index.js"
+  },
+  "author": "cbrgpl",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^3.1.0"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0",
+    "eslint": "^8.6.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-standard": "^5.0.0"
+  }
+}
