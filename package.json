@@ -3,11 +3,33 @@
   "version": "0.1.0",
   "description": "web services for making request with RESTfull API",
   "main": "index.js",
-  "scripts": {
-    "index": "node ./index.js"
+  "author": {
+    "name": "cbrgpl",
+    "email": "tttcbrg@gmail.com"
   },
-  "author": "cbrgpl",
-  "license": "ISC",
+  "license": "MIT",
+  "keywords": [
+    "rest",
+    "nodejs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cbrgpl/rest-service"
+  },
+  "bugs": {
+    "url": "https://github.com/cbrgpl/rest-service/issues",
+    "email": "tttcbrg@gmail.com"
+  },
+  "homepage": "https://github.com/cbrgpl/rest-service",
+  "engines": {
+    "node": ">=14"
+  },
+  "scripts": {
+    "start": "node libs/index.js",
+    "lint": "eslint --ignore-path .gitignore .",
+    "fix": "eslint --fix --ignore-path .gitignore .",
+    "test": "npm run lint && jest test"
+  },
   "dependencies": {
     "node-fetch": "^3.1.0"
   },
@@ -16,6 +38,7 @@
     "eslint": "^8.6.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-standard": "^5.0.0"
+    "eslint-plugin-standard": "^5.0.0",
+    "jest": "^27.4.7"
   }
 }
