@@ -1,4 +1,13 @@
-const isObject = require( '../helpers/isObject' )
+const isObject = require( '../helper/isObject' )
+
+/*
+
+!!!
+НУЖНО УДАЛИТЬ ИЗ РЕПОЗИТОРИЯ
+!!!
+
+*/
+
 
 const MODS = {
   KEBAB_CAMEL: 'KC',

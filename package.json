@@ -1,8 +1,8 @@
 {
   "name": "rest-service",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "web services for making request with RESTfull API",
-  "main": "index.js",
+  "browser": "dist/rest-service.js",
   "author": {
     "name": "cbrgpl",
     "email": "tttcbrg@gmail.com"
@@ -10,7 +10,8 @@
   "license": "MIT",
   "keywords": [
     "rest",
-    "nodejs"
+    "web",
+    "service"
   ],
   "repository": {
     "type": "git",
@@ -21,24 +22,25 @@
     "email": "tttcbrg@gmail.com"
   },
   "homepage": "https://github.com/cbrgpl/rest-service",
-  "engines": {
-    "node": ">=14"
-  },
   "scripts": {
     "start": "node libs/index.js",
-    "lint": "eslint --ignore-path .gitignore .",
-    "fix": "eslint --fix --ignore-path .gitignore .",
-    "test": "npm run lint && jest test"
-  },
-  "dependencies": {
-    "node-fetch": "^3.1.0"
+    "build": "webpack --env production --progress --watch --config-name main --config webpack.config.js",
+    "lint": "eslint",
+    "fix": "eslint --fix",
+    "test": "jest test"
   },
   "devDependencies": {
-    "dotenv": "^10.0.0",
+    "@babel/core": "^7.16.7",
+    "@babel/preset-env": "^7.16.8",
+    "babel-loader": "^8.2.3",
     "eslint": "^8.6.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-standard": "^5.0.0",
-    "jest": "^27.4.7"
+    "jest": "^27.4.7",
+    "node-fetch": "^3.1.0",
+    "terser-webpack-plugin": "^5.3.0",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1"
   }
 }
