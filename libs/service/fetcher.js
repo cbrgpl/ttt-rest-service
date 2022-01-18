@@ -1,12 +1,12 @@
-const ApiModule = require( './apiModule' );
+const { ApiModule } = require( './apiModule' );
 const { isFunction } = require( '../helper/isFunction' );
 
 const { defaultHook } = require( '../helper/defaultHook' );
 
 
-module.exports = class Fetcher {
-  constructor( apiModuleScheme = {} ) {
-    this.apiModule = new ApiModule( apiModuleScheme );
+module.exports.Fetcher = class  {
+  constructor( apiModule = [] ) {
+    this.apiModule = new ApiModule( apiModule );
 
     this.beforeFetch = defaultHook;
   }
@@ -15,19 +15,17 @@ module.exports = class Fetcher {
     if( isFunction( callback ) ) {
       this.beforeFetch = callback;
     } else {
-      throw TypeError( 'Passed \'callback\' argument value is not callable' );
+      throw TypeError( 'Callback-hook must be an function' );
     };
   }
 
-  request( { endpointName, body = null, queryParams = {}, id } ) {
-    const requestParams = this.apiModule.getRequestParams( {
-      endpointName,
-      body,
-      queryParams,
-      id
-    } );
+  request( { handlerName, data = {}, id } ) {
+    const requestParams = this.apiModule.getRequestParams( handlerName, data, id );
 
-    this.beforeFetch( requestParams );
+    // allows cancel a fetch
+    if( this.beforeFetch( requestParams ) ) {
+      return;
+    }
 
     return fetch( requestParams.url, requestParams.fetchParams );
   }

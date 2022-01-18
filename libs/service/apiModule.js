@@ -1,28 +1,19 @@
-const ApiEndpoint = require( './apiEndpoint' );
-const EndpointError = require( '../error/endpointError' );
+const { ApiEndpoint } = require( './apiEndpoint' );
 
-module.exports = class ApiModule {
+module.exports.ApiModule = class {
   constructor( moduleScheme ) {
     this.apiEndpoints = {};
 
-    for( const endpointKey in moduleScheme ) {
-      this.apiEndpoints[ endpointKey ] = new ApiEndpoint( endpointKey, moduleScheme[ endpointKey ] );
+    for( const endpointMetadata of moduleScheme ) {
+      const endpointName = endpointMetadata.handler;
+      this.apiEndpoints[ endpointName ] = new ApiEndpoint( endpointMetadata );
     }
   }
 
-  checkEndpointExist( endpointName ) {
-    const endpointArray = Object.keys( this.apiEndpoints );
 
-    if( !endpointArray.includes( endpointName ) ) {
-      throw new EndpointError( endpointName, `Endpoint with name ${ endpointName } is not exists` );
-    }
-  }
-
-  getRequestParams( { endpointName, queryParams, body, id } ) {
-    this.checkEndpointExist( endpointName );
-
+  getRequestParams( endpointName,  ...params ) {
     const endpoint = this.apiEndpoints[ endpointName ];
 
-    return endpoint.getRequestParams( queryParams, body, id );
+    return endpoint.getRequestParams( ...params );
   }
 };

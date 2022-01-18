@@ -1,62 +1,72 @@
-const EndpointError = require( '../error/endpointError' );
+const { NO_CONTENT_TYPE } = require( './../enum/consts' );
+const { METHOD_TYPES } = require( './../enum/methodTypes' );
+const queryIdTempalate = '{{id}}';
 
-const schemeKeyTypes = {
-  path: 'string',
-  fetchParams: 'object',
-  queryParams: 'object',
-  body: null,
-  id: null
-};
-
-module.exports = class ApiEndpoint {
-  constructor( endpointName, endpointScheme ) {
-    this.endpointName = endpointName;
-    this.validateEndpointScheme( endpointScheme );
-
-    this.endpointScheme = endpointScheme;
+module.exports.ApiEndpoint = class {
+  constructor( endpointMetadata ) {
+    this.endpointMetadata = endpointMetadata;
   }
 
-  validateEndpointScheme( endpointScheme ) {
-    for( const schemeKey in endpointScheme ) {
-      if( schemeKeyTypes[ schemeKey ] !== null && !schemeKeyTypes[ schemeKey ] ) {
-        throw new EndpointError( this.endpointName, `The ${ schemeKey } is not valid scheme key` );
-      }
-
-      if( typeof endpointScheme[ schemeKey ] !== schemeKeyTypes[ schemeKey ] && endpointScheme[ schemeKey ] !== schemeKeyTypes[ schemeKey ] ) {
-        throw new EndpointError( this.endpointName, `The ${ schemeKey } key of the endpoint scheme does not match the expected type or value` );
-      }
-    }
-  }
-
-  getRequestParams( queryParams, body, id ) {
-    const requestParams = {
-      url: this.getUrl( queryParams, id ),
+  getDefaultRequestParams() {
+    return {
+      url: null,
       fetchParams: {
-        ...this.endpointScheme.fetchParams,
+        body: null,
+        method: this.endpointMetadata.method,
+        headers: this.endpointMetadata.headers,
+      },
+      requestMetadata: {
+        secure: this.endpointMetadata.secure,
+        roles: this.endpointMetadata.roles,
       }
     };
+  }
 
-    if( this.endpointScheme.body === null ) {
-      requestParams.fetchParams.body = body;
+  getRequestParams( data, id ) {
+    const defaultRequestParams = this.getDefaultRequestParams();
+    const methodType = this.defineMethodType( defaultRequestParams.fetchParams.method );
+
+    if( methodType === METHOD_TYPES.USE_BODY.NAME ) {
+      return this.prepareUseBodyRequest( defaultRequestParams, data );
+    } else {
+      return this.prepareUseQueryParamsRequest( defaultRequestParams, data, id );
     }
-
-    return requestParams;
   }
 
-  getUrl( queryParams, id ) {
-    const url = this.endpointScheme.path.replace( '{{id}}', id );
+  prepareUseBodyRequest( defaultRequestParams, data ) {
+    defaultRequestParams.url = this.endpointMetadata.path;
+    defaultRequestParams.fetchParams.body = data;
 
-    return this.endpointScheme.queryParams === null ? this.insertQueryParams( url, queryParams ) : url;
+    return defaultRequestParams;
   }
 
-  insertQueryParams( path, queryParams ) {
-    let url = path + '?';
+  prepareUseQueryParamsRequest( defaultRequestParams, data, id ) {
+    defaultRequestParams.url = this.insertUrlId( id );
+    defaultRequestParams.url = this.insertQueryParams( defaultRequestParams.url, data );
+
+    return defaultRequestParams;
+  }
+
+  defineMethodType( method ) {
+    if( METHOD_TYPES.USE_BODY.METHODS.includes( method ) ) {
+      return METHOD_TYPES.USE_BODY.NAME;
+    } else {
+      return METHOD_TYPES.USE_QUERY_PARAMS.NAME;
+    };
+  }
+
+  insertUrlId( id ) {
+    return this.endpointMetadata.path.replace( queryIdTempalate, id );
+  }
+
+  insertQueryParams( url, queryParams ) {
+    let paramsUrl = url + '?';
 
     for( const param in queryParams ) {
-      url += `${ param }=${ queryParams[ param ] }&`;
+      paramsUrl += `${ param }=${ queryParams[ param ] }&`;
     }
 
-    return url.slice( 0, -1 );
+    return paramsUrl.slice( 0, -1 );
   }
 
 };

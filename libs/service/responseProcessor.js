@@ -1,7 +1,7 @@
-const StatusError = require( '../error/statusError' );
-const MimeTypeParser = require( './mimeTypeParser' );
+const { StatusError } = require( '../error/statusError' );
+const { MimeTypeParser } = require( './mimeTypeParser' );
 
-module.exports = class ResponseProcessor {
+module.exports.ResponseProcessor = class  {
   constructor( mimeParserPairs, invalidStatuses = [] ) {
     this.invalidStatuses = invalidStatuses;
     this.mimeTypeParser = new MimeTypeParser( mimeParserPairs );

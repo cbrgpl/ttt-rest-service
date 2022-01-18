@@ -1,5 +1,5 @@
 // regexp lookbehind analog
-module.exports.lookbehindAnalog = ( value, keyword, unnecesarryPart ) => {
+module.exports.lookbehind = ( value, keyword, unnecesarryPart ) => {
   if( typeof value !== 'string' ) {
     throw TypeError( 'Value must be type of \'string\'' );
   }
