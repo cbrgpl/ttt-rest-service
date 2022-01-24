@@ -59,36 +59,43 @@ const API = {
 async function test() {
   const { Service } = require( './../service/service' );
   const { ResponseProcessor } = require( './../service/responseProcessor' );
+  const { MimeParser } = require( '../service/mimeParser' );
 
-  const mimeParserPairs = {
-    'application/json': ( data ) => console.log( 'app/json', data )
-  };
-  const responseProcessor = new ResponseProcessor( mimeParserPairs );
+  const mimeParserPairs = [
+    [ 'application/json', ( data ) => console.log( 'app/json', data ) ]
+  ];
+
+  const mimeParser = new MimeParser( mimeParserPairs );
+  const responseProcessor = new ResponseProcessor( mimeParser );
 
   const service = new Service( {
-    moduleScheme: API.auth,
+    apiModuleSchema: API.auth,
     responseProcessor,
     name: 'auth',
   } );
 
-  service.onBeforeRequest( 'login', ( args ) => {
-    console.log( 'onBeforeRequest' );
-    console.log( args );
+  const beforeRequestHook = ( requestArgs ) => {
+    console.log( 'beforeRequestHook' );
+    console.log( requestArgs );
     console.log( '\n\n\n' );
-  } );
+  };
 
-  service.onBeforeFetch( ( requestParams ) => {
-    console.log( 'onBeforeFetch' );
+  const beforeFetchHook =  ( requestParams ) => {
+    console.log( 'beforeFetch' );
     console.log( requestParams );
     console.log( '\n\n\n' );
-  } );
+  };
 
 
-  service.onResponseHandled( ( handledResponse ) => {
-    console.log( 'onResponseHandled' );
+  const responseHandledHook = ( handledResponse ) => {
+    console.log( 'responseHandledHook' );
     console.log( handledResponse );
     console.log( '\n\n\n' );
-  } );
+  };
+
+  service.onBeforeRequest( beforeRequestHook );
+  service.onBeforeFetch( beforeFetchHook );
+  service.onResponseHandled( responseHandledHook );
 
   service.addHandler( {
     handlerName: API.auth[ 0 ].handler,
@@ -97,7 +104,7 @@ async function test() {
 
   const request = await service.login( {
     username: 'cybirgpl',
-    password: 'jeppka22'
+    password: 'jeppka22',
   } );
 }
 

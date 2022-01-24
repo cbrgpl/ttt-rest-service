@@ -2,9 +2,9 @@ const { NO_CONTENT_TYPE } = require( './../enum/consts' );
 const { METHOD_TYPES } = require( './../enum/methodTypes' );
 const queryIdTempalate = '{{id}}';
 
-module.exports.ApiEndpoint = class {
-  constructor( endpointMetadata ) {
-    this.endpointMetadata = endpointMetadata;
+module.exports.RequestParametrs = class {
+  constructor( requestMetadata ) {
+    this.requestMetadata = requestMetadata;
   }
 
   getDefaultRequestParams() {
@@ -12,12 +12,12 @@ module.exports.ApiEndpoint = class {
       url: null,
       fetchParams: {
         body: null,
-        method: this.endpointMetadata.method,
-        headers: this.endpointMetadata.headers,
+        method: this.requestMetadata.method,
+        headers: this.requestMetadata.headers,
       },
-      requestMetadata: {
-        secure: this.endpointMetadata.secure,
-        roles: this.endpointMetadata.roles,
+      security: {
+        secure: this.requestMetadata.secure,
+        roles: this.requestMetadata.roles,
       }
     };
   }
@@ -34,7 +34,7 @@ module.exports.ApiEndpoint = class {
   }
 
   prepareUseBodyRequest( defaultRequestParams, data ) {
-    defaultRequestParams.url = this.endpointMetadata.path;
+    defaultRequestParams.url = this.requestMetadata.path;
     defaultRequestParams.fetchParams.body = data;
 
     return defaultRequestParams;
@@ -56,7 +56,7 @@ module.exports.ApiEndpoint = class {
   }
 
   insertUrlId( id ) {
-    return this.endpointMetadata.path.replace( queryIdTempalate, id );
+    return this.requestMetadata.path.replace( queryIdTempalate, id );
   }
 
   insertQueryParams( url, queryParams ) {

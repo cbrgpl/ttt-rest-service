@@ -47,9 +47,7 @@ async function test() {
   const { Fetcher } = require( './../service/fetcher' );
   const fetcher = new Fetcher( API.auth );
 
-  fetcher.onBeforeFetch( ( requestParams ) => {
-    console.log( requestParams );
-  } );
+  // fetcher.onBeforeFetch( ( requestParams ) => console.log( requestParams ) );
 
   const request = await fetcher.request( {
     handlerName: 'login',

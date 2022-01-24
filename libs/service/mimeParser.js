@@ -1,4 +1,4 @@
-const { MimeTypeError } = require( '../error/mimeTypeError' );
+const { MimeError } = require( '../error/mimeError' );
 
 const { isFunction } = require( '../helper/isFunction' );
 const { NO_CONTENT_TYPE } = require( '../enum/consts' );
@@ -6,29 +6,27 @@ const { lookbehind } = require( '../helper/lookbehind' );
 
 const noContentTypeHandler = () => null;
 
-module.exports.MimeTypeParser = class  {
-  constructor( mimeParserPairs = {} ) {
+module.exports.MimeParser = class  {
+  constructor( mimeParserPairs = [] ) {
     this.validateMimeParsers( mimeParserPairs );
 
-    this.mimeParserPairs = mimeParserPairs;
-    this.mimeParserPairs[ NO_CONTENT_TYPE ] = noContentTypeHandler;
+    this.mimeParserPairs = new Map( mimeParserPairs );
+    this.mimeParserPairs.set( NO_CONTENT_TYPE, noContentTypeHandler );
   }
 
   validateMimeParsers( mimeParserPairs ) {
-    for( const mimeType in mimeParserPairs ) {
-      if( !isFunction( mimeParserPairs[ mimeType ] ) ) {
-        throw TypeError( 'MIME type parser must be an function' );
+    for( const mimeTypePair of mimeParserPairs ) {
+      if( !isFunction( mimeTypePair[ 1 ] ) ) {
+        throw TypeError( `MIME type parser for ${ mimeTypePair[ 0 ] } must be an function` );
       }
     }
   }
 
   getMimeParser( responseMimeType ) {
-    const expectedMimeTypes = Object.keys( this.mimeParserPairs );
-
-    if( expectedMimeTypes.includes( responseMimeType ) ) {
-      return this.mimeParserPairs[ responseMimeType ];
+    if( this.mimeParserPairs.has( responseMimeType ) ) {
+      return this.mimeParserPairs.get( responseMimeType );
     } else {
-      throw new MimeTypeError( responseMimeType, `A MIME type equal to '${ responseMimeType }' is not expect\nMake sure u defined right MIME type key` );
+      throw new MimeError( responseMimeType, `A MIME type equal to '${ responseMimeType }' is not expect\nMake sure u defined right MIME type key` );
     }
   }
 

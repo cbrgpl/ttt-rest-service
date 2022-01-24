@@ -1,29 +1,27 @@
 const { ApiModule } = require( './apiModule' );
-const { isFunction } = require( '../helper/isFunction' );
+const { HookClass } = require( './hookClass' );
 
-const { defaultHook } = require( '../helper/defaultHook' );
+const availableHooks = {
+  beforeFetch: 'beforeFetch'
+};
 
+module.exports.Fetcher = class extends HookClass {
+  constructor( apiModuleSchema = [] ) {
+    super( availableHooks );
 
-module.exports.Fetcher = class  {
-  constructor( apiModule = [] ) {
-    this.apiModule = new ApiModule( apiModule );
-
-    this.beforeFetch = defaultHook;
+    this.apiModule = new ApiModule( apiModuleSchema );
+    this.setHook( availableHooks.beforeFetch, () => false );
   }
 
   onBeforeFetch( callback ) {
-    if( isFunction( callback ) ) {
-      this.beforeFetch = callback;
-    } else {
-      throw TypeError( 'Callback-hook must be an function' );
-    };
+    this.setHook( availableHooks.beforeFetch, callback );
   }
 
   request( { handlerName, data = {}, id } ) {
     const requestParams = this.apiModule.getRequestParams( handlerName, data, id );
 
     // allows cancel a fetch
-    if( this.beforeFetch( requestParams ) ) {
+    if( this.callHook( availableHooks.beforeFetch, requestParams ) ) {
       return;
     }
 

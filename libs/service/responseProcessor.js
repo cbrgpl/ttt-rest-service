@@ -1,10 +1,9 @@
-const { StatusError } = require( '../error/statusError' );
-const { MimeTypeParser } = require( './mimeTypeParser' );
+const { StatusError } = require( './../error/statusError' );
 
 module.exports.ResponseProcessor = class  {
-  constructor( mimeParserPairs, invalidStatuses = [] ) {
+  constructor( mimeParser, invalidStatuses = [] ) {
     this.invalidStatuses = invalidStatuses;
-    this.mimeTypeParser = new MimeTypeParser( mimeParserPairs );
+    this.mimeParser = mimeParser;
   }
 
   async validateResponseStatus( httpResponse ) {
@@ -16,7 +15,7 @@ module.exports.ResponseProcessor = class  {
   async processResponse( httpResponse ) {
     this.validateResponseStatus( httpResponse );
 
-    const parsedBody = await this.mimeTypeParser.parseResponseBody( httpResponse );
+    const parsedBody = await this.mimeParser.parseResponseBody( httpResponse );
 
     const handledResponse = {
       parsedBody,

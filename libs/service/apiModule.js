@@ -1,18 +1,18 @@
-const { ApiEndpoint } = require( './apiEndpoint' );
+const { RequestParametrs } = require( './requestParametrs' );
 
 module.exports.ApiModule = class {
-  constructor( moduleScheme ) {
-    this.apiEndpoints = {};
+  constructor( moduleSchema ) {
+    this.parametrsOfRequests = {};
 
-    for( const endpointMetadata of moduleScheme ) {
-      const endpointName = endpointMetadata.handler;
-      this.apiEndpoints[ endpointName ] = new ApiEndpoint( endpointMetadata );
+    for( const requestMetadata of moduleSchema ) {
+      const endpointName = requestMetadata.handler;
+      this.parametrsOfRequests[ endpointName ] = new RequestParametrs( requestMetadata );
     }
   }
 
 
   getRequestParams( endpointName,  ...params ) {
-    const endpoint = this.apiEndpoints[ endpointName ];
+    const endpoint = this.parametrsOfRequests[ endpointName ];
 
     return endpoint.getRequestParams( ...params );
   }

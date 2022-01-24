@@ -1,4 +1,4 @@
-module.exports.MimeTypeError = class extends Error {
+module.exports.MimeError = class extends Error {
   constructor( responseMimeType, ...params ) {
     super( ...params );
 

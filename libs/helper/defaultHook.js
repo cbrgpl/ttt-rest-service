@@ -1,1 +1,1 @@
-module.exports.defaultHook = ( val ) => val;
+module.exports.defaultHook = ( ...val ) => val ;

@@ -80,21 +80,27 @@ const API = {
 async function test() {
   const { ServiceFactory } = require( './../service/serviceFactory' );
   const { ResponseProcessor } = require( './../service/responseProcessor' );
+  const { MimeParser } = require( '../service/mimeParser' );
 
-  const mimeParserPairs = {
-    'application/json': ( val ) => {
-      console.log( 'mimeParser', val );
-      return val;
-    }
-  };
-  const responseProcessor = new ResponseProcessor( mimeParserPairs );
+  const mimeParserPairs = [
+    [
+      'application/json',
+      ( data ) => console.log( 'app/json', data )
+    ]
+  ];
+
+  const mimeParser = new MimeParser( mimeParserPairs );
+  const responseProcessor = new ResponseProcessor( mimeParser );
 
   const serviceFactory = new ServiceFactory( {
     responseProcessor
   } );
 
+  const factoryConstructorArgs = {
+    responseProcessor,
+  };
 
-  const services = ServiceFactory.generateServices( serviceFactory, API );
+  const services = ServiceFactory.getServicesForApi( ServiceFactory, factoryConstructorArgs, API );
 
   console.log( services );
 }

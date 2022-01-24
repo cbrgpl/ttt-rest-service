@@ -1,44 +1,47 @@
-const { Service: DefaultService } = require( './service' );
+const { Service } = require( './service' );
 
-module.exports.ServiceFactory = class ServiceFactory {
-  static generateServices( serviceFactory, apiModules ) {
-    if( !( serviceFactory instanceof ServiceFactory ) && serviceFactory.prototype !== ServiceFactory ) {
-      throw TypeError( 'Passed serviceFactory is not extend ServiceFactory Class' );
-    }
+module.exports.ServiceFactory = class {
+  static getServicesForApi( Constructor, constructorArgs, api ) {
+    const factory = new Constructor( constructorArgs );
 
+    const services = factory.generateServices( api );
+
+    return services;
+  }
+
+  constructor( { responseProcessor = null } ) {
+    this.responseProcessor = responseProcessor;
+  }
+
+  generateServices( api ) {
     const services = {};
 
-    for( const moduleName in apiModules ) {
-      const service = serviceFactory.generateService( moduleName, apiModules[ moduleName ] );
+    for( const apiModule in api ) {
+      const service = this.generateService( apiModule, api[ apiModule ] );
       services[ service.name ] = service;
     }
 
     return services;
   }
 
-  constructor( { Service = DefaultService, responseProcessor = null } ) {
-    this.Service = Service;
-    this.responseProcessor = responseProcessor;
+  getServiceName( apiModule ) {
+    return apiModule.charAt( 0 ).toUpperCase() + apiModule.slice( 1 ) + 'Service';
   }
 
-  getServiceName( moduleName ) {
-    return moduleName.charAt( 0 ).toUpperCase() + moduleName.slice( 1 ) + 'Service';
-  }
-
-  generateService( moduleName, apiModule ) {
-    const serviceName = getServiceName( moduleName );
-    const service = new this.Service( {
-      name: serviceName,
-      moduleScheme: apiModule,
+  generateService( apiModule, apiModuleSchema ) {
+    const name = this.getServiceName( apiModule );
+    const service = new Service( {
+      name,
+      apiModuleSchema,
       responseProcessor: this.responseProcessor,
     } );
 
-    for( const endpointMetadata of apiModule ) {
-      const handlerName = endpointMetadata.handler;
+    for( const requestMetadata of apiModuleSchema ) {
+      const handlerName = requestMetadata.handler;
 
       service.addHandler( {
         handlerName,
-        dataScheme: endpointMetadata.scheme,
+        dataSchema: requestMetadata.schema,
       } );
     }
 

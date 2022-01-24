@@ -1,37 +1,34 @@
-const { ResponseProcessor } = require( './responseProcessor' );
 const { Fetcher } = require( './fetcher' );
+const { ajv } = require( './../helper/ajv' );
 
 const { ValidationError } = require( './../error/validationError' );
+const { HookClass } = require( './hookClass' );
 
-const { ajv } = require( './../helper/ajv' );
-const { defaultHook } = require( '../helper/defaultHook' );
-const { isFunction } = require( './../helper/isFunction' );
+const availableHooks = {
+  beforeRequest: 'beforeRequest',
+  responseHandled: 'responseHandled'
+};
 
-module.exports.Service = class {
-  constructor( { moduleScheme, responseProcessor = null, name = null } ) {
+module.exports.Service = class extends HookClass {
+  constructor( { apiModuleSchema, responseProcessor = null, name = null } ) {
+    super( availableHooks );
+
     this.name = name;
 
-    this.fetcher = new Fetcher( moduleScheme );
+    this.fetcher = new Fetcher( apiModuleSchema );
     this.responseProcessor = responseProcessor;
 
-    this.defaultBeforeRequest = function ( { handlerName, data, id } ) {
-      return arguments[ 0 ];
-    };
-
-    this.responseHandledHook = defaultHook;
-    this.beforeRequestHooks = {};
-    this.validators = {}; // <handler, ajv-validator> pairs
+    this.ajvValidators = {}; // <handler, ajv-validator> pairs
   }
 
   async request( { handlerName, data = {}, id } ) {
-    const beforeRequestHook = this.beforeRequestHooks[ handlerName ];
-    const hookedArgs = beforeRequestHook( arguments[ 0 ] ) || arguments[ 0 ];
-
-    const httpResponse = await this.fetcher.request( hookedArgs );
+    const requestArgs = this.callHook( availableHooks.beforeRequest, { handlerName, data, id } ) || arguments[ 0 ];
+    const httpResponse = await this.fetcher.request( requestArgs );
 
     if( this.responseProcessor !== null ) {
       const handledResponse =  await this.responseProcessor.processResponse( httpResponse );
-      this.hooks.responseHandled( handledResponse );
+
+      this.callHook( availableHooks.responseHandled, { handledResponse } );
       return handledResponse;
     } else {
       return httpResponse;
@@ -39,7 +36,7 @@ module.exports.Service = class {
   }
 
   validateData( data, dataSchema, handlerName ) {
-    const dataValidator = this.validators[ handlerName ];
+    const dataValidator = this.ajvValidators[ handlerName ];
 
     if( !dataValidator( data ) ) {
       const errorMessage = 'Got error while validating data with scheme';
@@ -51,8 +48,7 @@ module.exports.Service = class {
 
   addHandler( { handlerName, dataSchema } ) {
     if( !this.handlerName ) {
-      this.beforeRequestHooks[ handlerName ] = this.defaultBeforeRequest;
-      this.validators[ handlerName ] = dataSchema ? ajv.compile( dataSchema ) : ( data ) => true;
+      this.ajvValidators[ handlerName ] = dataSchema ? ajv.compile( dataSchema ) : ( data ) => true;
 
       this[ handlerName ] = async ( data, id ) => {
         this.validateData( data, dataSchema, handlerName );
@@ -68,27 +64,15 @@ module.exports.Service = class {
     }
   }
 
-  setDefaultBeforeRequest( callback ) {
-    if( isFunction( callback ) ) {
-      this.defaultBeforeRequest = callback;
-    } else {
-      throw TypeError( 'Callback-hook must be an function' );
-    }
+  onBeforeRequest( callback ) {
+    this.setHook( availableHooks.beforeRequest, callback );
   }
 
-  onBeforeRequest( handlerName, callback ) {
-    if( isFunction( callback ) ) {
-      this.beforeRequestHooks[ handlerName ] = callback;
-    } else {
-      throw TypeError( 'Callback-hook must be an function' );
-    }
+  onResponseHandled( callback ) {
+    this.setHook( availableHooks.responseHandled, callback );
   }
 
   onBeforeFetch( callback ) {
     this.fetcher.onBeforeFetch( callback );
-  }
-
-  onResponseHandled( callback ) {
-    this.responseHandledHook = callback;
   }
 };
