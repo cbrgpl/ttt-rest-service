@@ -1,30 +1,34 @@
-const { ApiModule } = require( './apiModule' );
-const { HookClass } = require( './hookClass' );
+const { Hookable } = require( './Hookable' );
 
-const availableHooks = {
-  beforeFetch: 'beforeFetch'
-};
+const mapableArrayOfHooks = Hookable.getConstructorMapableArray( [
+  'beforeFetch'
+] );
 
-module.exports.Fetcher = class extends HookClass {
-  constructor( apiModuleSchema = [] ) {
-    super( availableHooks );
+module.exports.Fetcher = class extends Hookable {
+  constructor( requestMap ) {
+    super( mapableArrayOfHooks );
 
-    this.apiModule = new ApiModule( apiModuleSchema );
-    this.setHook( availableHooks.beforeFetch, () => false );
+    this.requestMap = requestMap;
+    this.setHook( 'beforeFetch', () => false );
   }
 
   onBeforeFetch( callback ) {
-    this.setHook( availableHooks.beforeFetch, callback );
+    this.setHook( 'beforeFetch', callback );
   }
 
   request( { handlerName, data = {}, id } ) {
-    const requestParams = this.apiModule.getRequestParams( handlerName, data, id );
+    if( !this.requestMap.has( handlerName ) ) {
+      throw Error( `Request parameters for handler with name ${ handlerName } are not exists` );
+    }
+
+    const requestParameters = this.requestMap.get( handlerName );
+    const recievedRequestParameters = requestParameters.getRequestParams( data, id );
 
     // allows cancel a fetch
-    if( this.callHook( availableHooks.beforeFetch, requestParams ) ) {
+    if( this.callHook( 'beforeFetch', recievedRequestParameters ) ) {
       return;
     }
 
-    return fetch( requestParams.url, requestParams.fetchParams );
+    return fetch( recievedRequestParameters.url, recievedRequestParameters.fetchParams );
   }
 };

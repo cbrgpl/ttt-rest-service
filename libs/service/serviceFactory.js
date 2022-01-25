@@ -1,48 +1,35 @@
 const { Service } = require( './service' );
 
 module.exports.ServiceFactory = class {
-  static getServicesForApi( Constructor, constructorArgs, api ) {
-    const factory = new Constructor( constructorArgs );
-
-    const services = factory.generateServices( api );
-
-    return services;
-  }
-
-  constructor( { responseProcessor = null } ) {
+  constructor(  fetcherFactory = null, responseProcessor = null ) {
     this.responseProcessor = responseProcessor;
+    this.fetcherFactory = fetcherFactory;
   }
 
   generateServices( api ) {
     const services = {};
 
-    for( const apiModule in api ) {
-      const service = this.generateService( apiModule, api[ apiModule ] );
+    for( const apiModuleName in api ) {
+      const service = this.generateService( apiModuleName, api[ apiModuleName ] );
       services[ service.name ] = service;
     }
 
     return services;
   }
 
-  getServiceName( apiModule ) {
-    return apiModule.charAt( 0 ).toUpperCase() + apiModule.slice( 1 ) + 'Service';
+  getServiceName( apiModuleName ) {
+    return apiModuleName.charAt( 0 ).toUpperCase() + apiModuleName.slice( 1 ) + 'Service';
   }
 
-  generateService( apiModule, apiModuleSchema ) {
-    const name = this.getServiceName( apiModule );
-    const service = new Service( {
-      name,
-      apiModuleSchema,
-      responseProcessor: this.responseProcessor,
-    } );
+  generateService( apiModuleName, apiModuleSchema ) {
+    const name = this.getServiceName( apiModuleName );
+    const fetcher = this.fetcherFactory.getFetcher( apiModuleSchema );
+    const service = new Service( fetcher, this.responseProcessor, name );
 
     for( const requestMetadata of apiModuleSchema ) {
       const handlerName = requestMetadata.handler;
 
-      service.addHandler( {
-        handlerName,
-        dataSchema: requestMetadata.schema,
-      } );
+      service.addHandler( handlerName, requestMetadata.schema );
     }
 
     return service;

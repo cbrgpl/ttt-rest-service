@@ -1,10 +1,10 @@
-const { ApiModule } = require( './../service/apiModule.js' );
+const { FetcherFactory } = require( './../service/fetcherFactory.js' );
 
 const API = {
   auth: [
     {
       method: 'POST',
-      path: '/auth/login',
+      url: '/auth/login',
       secure: false,
       headers: {
         'Content-Type': 'application/json',
@@ -19,7 +19,7 @@ const API = {
     },
     {
       method: 'GET',
-      path: '/auth/logout/{{id}}',
+      url: '/auth/logout/{{id}}',
       secure: true,
       headers: {
         Accept: 'application/json',
@@ -33,7 +33,7 @@ const API = {
     },
     {
       method: 'POST',
-      path: '/auth/registrate',
+      url: '/auth/registrate',
       secure: false,
       schema: {
         // ...
@@ -48,12 +48,14 @@ const API = {
 
 
 module.exports.test = function() {
-  const apiModule = new ApiModule( API.auth );
+  const fetcherFactory = new FetcherFactory();
+  const fetcher = fetcherFactory.getFetcher( API.auth );
+  const fetcherMap = fetcher.requestMap;
 
   const requestParams = {};
 
-  requestParams[ 'login' ] = apiModule.getRequestParams( 'login', { body: 1 } );
-  requestParams[ 'logout' ] = apiModule.getRequestParams( 'logout', { hard: true, time: 5 }, 'id_121' );
+  requestParams[ 'login' ] = fetcherMap.get( 'login' ).getRequestParams( { body: 1 } );
+  requestParams[ 'logout' ] = fetcherMap.get( 'logout' ).getRequestParams( { hard: true, time: 5 }, 'id_121' );
 
   console.log( 'q' );
 };

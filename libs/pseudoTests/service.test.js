@@ -1,8 +1,13 @@
+const { Service } = require( './../service/service' );
+const { FetcherFactory } = require( './../service/fetcherFactory' );
+const { ResponseProcessor } = require( './../service/responseProcessor' );
+const { MimeParser } = require( '../service/mimeParser' );
+
 const API = {
   auth: [
     {
       method: 'POST',
-      path: '/auth/login',
+      url: '/auth/login',
       secure: false,
       useBody: true,
       headers: {
@@ -29,7 +34,7 @@ const API = {
     },
     {
       method: 'GET',
-      path: '/auth/logout/{{id}}',
+      url: '/auth/logout/{{id}}',
       secure: true,
       useBody: false,
       headers: {
@@ -44,7 +49,7 @@ const API = {
     },
     {
       method: 'POST',
-      path: '/auth/registrate',
+      url: '/auth/registrate',
       secure: false,
       useBody: true,
       schema: {
@@ -57,22 +62,17 @@ const API = {
 };
 
 async function test() {
-  const { Service } = require( './../service/service' );
-  const { ResponseProcessor } = require( './../service/responseProcessor' );
-  const { MimeParser } = require( '../service/mimeParser' );
-
   const mimeParserPairs = [
     [ 'application/json', ( data ) => console.log( 'app/json', data ) ]
   ];
 
+  const fetcherFactory = new FetcherFactory();
+  const fetcher = fetcherFactory.getFetcher( API.auth );
+
   const mimeParser = new MimeParser( mimeParserPairs );
   const responseProcessor = new ResponseProcessor( mimeParser );
 
-  const service = new Service( {
-    apiModuleSchema: API.auth,
-    responseProcessor,
-    name: 'auth',
-  } );
+  const service = new Service( fetcher, responseProcessor );
 
   const beforeRequestHook = ( requestArgs ) => {
     console.log( 'beforeRequestHook' );
@@ -80,7 +80,7 @@ async function test() {
     console.log( '\n\n\n' );
   };
 
-  const beforeFetchHook =  ( requestParams ) => {
+  const beforeFetchHook =  ( ...requestParams ) => {
     console.log( 'beforeFetch' );
     console.log( requestParams );
     console.log( '\n\n\n' );
@@ -97,10 +97,7 @@ async function test() {
   service.onBeforeFetch( beforeFetchHook );
   service.onResponseHandled( responseHandledHook );
 
-  service.addHandler( {
-    handlerName: API.auth[ 0 ].handler,
-    dataSchema: API.auth[ 0 ].schema
-  } );
+  service.addHandler( API.auth[ 0 ].handler, API.auth[ 0 ].schema );
 
   const request = await service.login( {
     username: 'cybirgpl',

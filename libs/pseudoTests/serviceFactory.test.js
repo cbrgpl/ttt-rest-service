@@ -2,7 +2,7 @@ const API = {
   auth: [
     {
       method: 'POST',
-      path: '/auth/login',
+      url: '/auth/login',
       secure: false,
       headers: {
         'Content-Type': 'application/json',
@@ -17,7 +17,7 @@ const API = {
     },
     {
       method: 'GET',
-      path: '/auth/logout/{{id}}',
+      url: '/auth/logout/{{id}}',
       secure: true,
       headers: {
         Accept: 'application/json',
@@ -31,7 +31,7 @@ const API = {
     },
     {
       method: 'POST',
-      path: '/auth/registrate',
+      url: '/auth/registrate',
       secure: false,
       headers: {
         Accept: 'application/json',
@@ -47,7 +47,7 @@ const API = {
   user: [
     {
       method: 'GET',
-      path: '/user/get/{{id}}',
+      url: '/user/get/{{id}}',
       secure: true,
       headers: {
         Accept: 'application/json',
@@ -61,7 +61,7 @@ const API = {
     },
     {
       method: 'PUT',
-      path: '/auth/put/{{id}}',
+      url: '/auth/put/{{id}}',
       secure: true,
       headers: {
         Accept: 'application/json',
@@ -81,6 +81,7 @@ async function test() {
   const { ServiceFactory } = require( './../service/serviceFactory' );
   const { ResponseProcessor } = require( './../service/responseProcessor' );
   const { MimeParser } = require( '../service/mimeParser' );
+  const { FetcherFactory } = require( './../service/fetcherFactory' );
 
   const mimeParserPairs = [
     [
@@ -89,18 +90,15 @@ async function test() {
     ]
   ];
 
+  const fetcherFactory = new FetcherFactory();
   const mimeParser = new MimeParser( mimeParserPairs );
   const responseProcessor = new ResponseProcessor( mimeParser );
 
-  const serviceFactory = new ServiceFactory( {
-    responseProcessor
-  } );
+  const serviceFactory = new ServiceFactory( fetcherFactory, responseProcessor );
 
-  const factoryConstructorArgs = {
-    responseProcessor,
-  };
 
-  const services = ServiceFactory.getServicesForApi( ServiceFactory, factoryConstructorArgs, API );
+
+  const services = serviceFactory.generateServices( API );
 
   console.log( services );
 }

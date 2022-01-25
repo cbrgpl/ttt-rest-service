@@ -1,8 +1,7 @@
-const { NO_CONTENT_TYPE } = require( './../enum/consts' );
 const { METHOD_TYPES } = require( './../enum/methodTypes' );
 const queryIdTempalate = '{{id}}';
 
-module.exports.RequestParametrs = class {
+module.exports.RequestParameters = class {
   constructor( requestMetadata ) {
     this.requestMetadata = requestMetadata;
   }
@@ -11,7 +10,6 @@ module.exports.RequestParametrs = class {
     return {
       url: null,
       fetchParams: {
-        body: null,
         method: this.requestMetadata.method,
         headers: this.requestMetadata.headers,
       },
@@ -25,23 +23,23 @@ module.exports.RequestParametrs = class {
   getRequestParams( data, id ) {
     const defaultRequestParams = this.getDefaultRequestParams();
     const methodType = this.defineMethodType( defaultRequestParams.fetchParams.method );
+    defaultRequestParams.url = this.insertUrlId( id );
 
     if( methodType === METHOD_TYPES.USE_BODY.NAME ) {
       return this.prepareUseBodyRequest( defaultRequestParams, data );
     } else {
-      return this.prepareUseQueryParamsRequest( defaultRequestParams, data, id );
+      return this.prepareUseQueryParamsRequest( defaultRequestParams, data );
     }
   }
 
   prepareUseBodyRequest( defaultRequestParams, data ) {
-    defaultRequestParams.url = this.requestMetadata.path;
+    defaultRequestParams.url = this.requestMetadata.url;
     defaultRequestParams.fetchParams.body = data;
 
     return defaultRequestParams;
   }
 
-  prepareUseQueryParamsRequest( defaultRequestParams, data, id ) {
-    defaultRequestParams.url = this.insertUrlId( id );
+  prepareUseQueryParamsRequest( defaultRequestParams, data ) {
     defaultRequestParams.url = this.insertQueryParams( defaultRequestParams.url, data );
 
     return defaultRequestParams;
@@ -56,7 +54,7 @@ module.exports.RequestParametrs = class {
   }
 
   insertUrlId( id ) {
-    return this.requestMetadata.path.replace( queryIdTempalate, id );
+    return this.requestMetadata.url.replace( queryIdTempalate, id );
   }
 
   insertQueryParams( url, queryParams ) {

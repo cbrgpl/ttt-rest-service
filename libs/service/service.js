@@ -1,34 +1,34 @@
-const { Fetcher } = require( './fetcher' );
 const { ajv } = require( './../helper/ajv' );
 
 const { ValidationError } = require( './../error/validationError' );
-const { HookClass } = require( './hookClass' );
+const { Hookable } = require( './Hookable' );
 
-const availableHooks = {
-  beforeRequest: 'beforeRequest',
-  responseHandled: 'responseHandled'
-};
+const mapableArrayOfHooks = Hookable.getConstructorMapableArray( [
+  'beforeRequest',
+  'responseHandled'
+] );
 
-module.exports.Service = class extends HookClass {
-  constructor( { apiModuleSchema, responseProcessor = null, name = null } ) {
-    super( availableHooks );
+
+module.exports.Service = class extends Hookable {
+  constructor( fetcher = null, responseProcessor = null, name = null ) {
+    super( mapableArrayOfHooks );
 
     this.name = name;
 
-    this.fetcher = new Fetcher( apiModuleSchema );
+    this.fetcher = fetcher;
     this.responseProcessor = responseProcessor;
 
     this.ajvValidators = {}; // <handler, ajv-validator> pairs
   }
 
   async request( { handlerName, data = {}, id } ) {
-    const requestArgs = this.callHook( availableHooks.beforeRequest, { handlerName, data, id } ) || arguments[ 0 ];
+    const requestArgs = this.callHook( 'beforeRequest', { handlerName, data, id } ) || arguments[ 0 ];
     const httpResponse = await this.fetcher.request( requestArgs );
 
     if( this.responseProcessor !== null ) {
       const handledResponse =  await this.responseProcessor.processResponse( httpResponse );
 
-      this.callHook( availableHooks.responseHandled, { handledResponse } );
+      this.callHook( 'responseHandled', { handledResponse } );
       return handledResponse;
     } else {
       return httpResponse;
@@ -46,7 +46,7 @@ module.exports.Service = class extends HookClass {
     return true;
   }
 
-  addHandler( { handlerName, dataSchema } ) {
+  addHandler( handlerName, dataSchema ) {
     if( !this.handlerName ) {
       this.ajvValidators[ handlerName ] = dataSchema ? ajv.compile( dataSchema ) : ( data ) => true;
 
@@ -65,11 +65,11 @@ module.exports.Service = class extends HookClass {
   }
 
   onBeforeRequest( callback ) {
-    this.setHook( availableHooks.beforeRequest, callback );
+    this.setHook( 'beforeRequest', callback );
   }
 
   onResponseHandled( callback ) {
-    this.setHook( availableHooks.responseHandled, callback );
+    this.setHook( 'responseHandled', callback );
   }
 
   onBeforeFetch( callback ) {

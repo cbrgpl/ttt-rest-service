@@ -1,3 +1,3 @@
-const { test } = require( './pseudoTests/serviceFactory.test' );
+const { test } = require( './pseudoTests/service.test' );
 
 test();

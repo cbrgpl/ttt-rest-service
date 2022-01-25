@@ -1,13 +1,19 @@
-const { isFunction } = require( './../helper/isFunction' );
+const { isFunction } = require( '../helper/isFunction' );
 const defaultHook = ( val ) => val;
 
-module.exports.HookClass = class {
-  constructor( availableHooks ) {
-    this.hooks = new Map();
+module.exports.Hookable = class {
+  static getConstructorMapableArray( listOfHooks ) {
+    const mapableArray = [];
 
-    for( const hook in availableHooks ) {
-      this.hooks.set( hook, defaultHook );
+    for( const hook of listOfHooks ) {
+      mapableArray.push( [ hook, defaultHook ] );
     }
+
+    return mapableArray;
+  }
+
+  constructor( mapableArray ) {
+    this.hooks = new Map( mapableArray );
   }
 
   validateHook( hookCallback ) {
@@ -28,9 +34,9 @@ module.exports.HookClass = class {
     this.hooks.set( hookName, hookCallback );
   }
 
-  callHook( hookName, args ) {
+  callHook( hookName, ...args ) {
     const hook = this.hooks.get( hookName );
 
-    return hook( args );
+    return hook( ...args );
   }
 };

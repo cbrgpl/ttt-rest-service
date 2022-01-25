@@ -1,8 +1,10 @@
+const { FetcherFactory } = require( './../service/fetcherFactory.js' );
+
 const API = {
   auth: [
     {
       method: 'POST',
-      path: '/auth/login',
+      url: '/auth/login',
       secure: false,
       headers: {
         'Content-Type': 'application/json',
@@ -17,7 +19,7 @@ const API = {
     },
     {
       method: 'GET',
-      path: '/auth/logout/{{id}}',
+      url: '/auth/logout/{{id}}',
       secure: true,
       headers: {
         Accept: 'application/json',
@@ -31,7 +33,7 @@ const API = {
     },
     {
       method: 'POST',
-      path: '/auth/registrate',
+      url: '/auth/registrate',
       secure: false,
       schema: {
         // ...
@@ -44,8 +46,8 @@ const API = {
 
 
 async function test() {
-  const { Fetcher } = require( './../service/fetcher' );
-  const fetcher = new Fetcher( API.auth );
+  const fetcherFactory = new FetcherFactory();
+  const fetcher = fetcherFactory.getFetcher( API.auth );
 
   // fetcher.onBeforeFetch( ( requestParams ) => console.log( requestParams ) );
 

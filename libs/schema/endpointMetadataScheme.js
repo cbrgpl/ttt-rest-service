@@ -1,11 +1,11 @@
 module.exports.endpointMetadataScheme = {
   type: 'object',
-  required: [ 'method', 'path', 'handler' ],
+  required: [ 'method', 'url', 'handler' ],
   properties: {
     method: {
       type: 'string'
     },
-    path: {
+    url: {
       type: 'string'
     },
     handler: {
