@@ -78,10 +78,10 @@ const API = {
 
 
 async function test() {
-  const { ServiceFactory } = require( './../service/serviceFactory' );
-  const { ResponseProcessor } = require( './../service/responseProcessor' );
+  const { ServiceFactory } = require( '../factory/serviceFactory' );
+  const { ResponseProcessor } = require( '../service/responseProcessor' );
   const { MimeParser } = require( '../service/mimeParser' );
-  const { FetcherFactory } = require( './../service/fetcherFactory' );
+  const { FetcherFactory } = require( '../factory/fetcherFactory' );
 
   const mimeParserPairs = [
     [
@@ -105,7 +105,7 @@ async function test() {
 
 
 module.exports.test = async function() {
-  const { fetchPolyfill } = await import( './../fetch-polyfill.js' );
+  const { fetchPolyfill } = await import( '../fetch-polyfill.js' );
   await fetchPolyfill();
 
   test();

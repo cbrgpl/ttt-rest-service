@@ -1,8 +1,8 @@
 const { Hookable } = require( './Hookable' );
-
-const mapableArrayOfHooks = Hookable.getConstructorMapableArray( [
-  'beforeFetch'
-] );
+const { defaultHook } = require( './../helper/defaultHook' );
+const mapableArrayOfHooks =  [
+  [ 'beforeFetch', defaultHook ]
+];
 
 module.exports.Fetcher = class extends Hookable {
   constructor( requestMap ) {

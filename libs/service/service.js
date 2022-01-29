@@ -3,10 +3,12 @@ const { ajv } = require( './../helper/ajv' );
 const { ValidationError } = require( './../error/validationError' );
 const { Hookable } = require( './Hookable' );
 
-const mapableArrayOfHooks = Hookable.getConstructorMapableArray( [
-  'beforeRequest',
-  'responseHandled'
-] );
+const { defaultHook } = require( './../helper/defaultHook' );
+
+const mapableArrayOfHooks = [
+  [ 'beforeRequest', defaultHook ],
+  [ 'responseHandled', defaultHook ]
+];
 
 
 module.exports.Service = class extends Hookable {

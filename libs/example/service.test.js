@@ -1,5 +1,5 @@
 const { Service } = require( './../service/service' );
-const { FetcherFactory } = require( './../service/fetcherFactory' );
+const { FetcherFactory } = require( './../factory/fetcherFactory' );
 const { ResponseProcessor } = require( './../service/responseProcessor' );
 const { MimeParser } = require( '../service/mimeParser' );
 

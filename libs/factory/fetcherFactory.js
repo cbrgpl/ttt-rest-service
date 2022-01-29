@@ -1,5 +1,5 @@
-const { RequestParameters } = require( './requestParameters' );
-const { Fetcher } = require( './fetcher' );
+const { RequestParameters } = require( './../service/requestParameters' );
+const { Fetcher } = require( './../service/fetcher' );
 
 module.exports.FetcherFactory = class {
 
