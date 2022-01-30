@@ -22,12 +22,11 @@ module.exports.MimeParser = class  {
     }
   }
 
-  getMimeParser( responseMimeType ) {
-    if( this.mimeParserPairs.has( responseMimeType ) ) {
-      return this.mimeParserPairs.get( responseMimeType );
-    } else {
-      throw new MimeError( responseMimeType, `A MIME type equal to '${ responseMimeType }' is not expect\nMake sure u defined right MIME type key` );
-    }
+  parseResponseBody( httpResponse ) {
+    const mimeType = this.defineMimeType( httpResponse );
+    const mimeParser = this.getMimeParser( mimeType );
+
+    return mimeParser( httpResponse );
   }
 
   defineMimeType( httpResponse ) {
@@ -41,10 +40,11 @@ module.exports.MimeParser = class  {
     };
   }
 
-  parseResponseBody( httpResponse ) {
-    const mimeType = this.defineMimeType( httpResponse );
-    const mimeParser = this.getMimeParser( mimeType );
-
-    return mimeParser( httpResponse );
+  getMimeParser( responseMimeType ) {
+    if( this.mimeParserPairs.has( responseMimeType ) ) {
+      return this.mimeParserPairs.get( responseMimeType );
+    } else {
+      throw new MimeError( responseMimeType, `A MIME type equal to '${ responseMimeType }' is not expect\nMake sure u defined right MIME type key` );
+    }
   }
 };

@@ -1,4 +1,4 @@
-const { FetcherFactory } = require( './../factory/fetcherFactory.js' );
+const { FetcherFactory } = require( '../factory/fetcherFactory.js' );
 
 const API = {
   auth: [
@@ -45,17 +45,26 @@ const API = {
 };
 
 
-
-
-module.exports.test = function() {
+async function test() {
   const fetcherFactory = new FetcherFactory();
   const fetcher = fetcherFactory.getFetcher( API.auth );
-  const fetcherMap = fetcher.requestMap;
 
-  const requestParams = {};
+  // fetcher.onBeforeFetch( ( requestParams ) => console.log( requestParams ) );
 
-  requestParams[ 'login' ] = fetcherMap.get( 'login' ).getRequestParams( { body: 1 } );
-  requestParams[ 'logout' ] = fetcherMap.get( 'logout' ).getRequestParams( { hard: true, time: 5 }, 'id_121' );
+  const request = await fetcher.request( {
+    handlerName: 'login',
+    data: {
+      body: 1,
+      hard: true
+    },
+    id: 'id_2ie',
+  } );
+}
 
-  console.log( 'q' );
+
+module.exports.test = async function() {
+  const { fetchPolyfill } = await import( '../fetch-polyfill.js' );
+  await fetchPolyfill();
+
+  test();
 };

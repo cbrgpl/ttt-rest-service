@@ -24,8 +24,8 @@ module.exports.Fetcher = class extends Hookable {
     const requestParameters = this.requestMap.get( handlerName );
     const recievedRequestParameters = requestParameters.getRequestParams( data, id );
 
-    // allows cancel a fetch
-    if( this.callHook( 'beforeFetch', recievedRequestParameters ) ) {
+    const fetchCanceled = this.callHook( 'beforeFetch', recievedRequestParameters );
+    if( fetchCanceled ) {
       return;
     }
 

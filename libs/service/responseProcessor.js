@@ -6,7 +6,7 @@ module.exports.ResponseProcessor = class  {
     this.mimeParser = mimeParser;
   }
 
-  async validateResponseStatus( httpResponse ) {
+  validateResponseStatus( httpResponse ) {
     if( this.invalidStatuses.includes( httpResponse.status ) ) {
       throw new StatusError( httpResponse.status, httpResponse.url );
     }

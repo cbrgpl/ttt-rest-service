@@ -49,7 +49,7 @@ module.exports.Service = class extends Hookable {
   }
 
   addHandler( handlerName, dataSchema ) {
-    if( !this.handlerName ) {
+    if( !this[ handlerName ] ) {
       this.ajvValidators[ handlerName ] = dataSchema ? ajv.compile( dataSchema ) : ( data ) => true;
 
       this[ handlerName ] = async ( data, id ) => {

@@ -45,6 +45,16 @@ module.exports.RequestParameters = class {
     return defaultRequestParams;
   }
 
+  insertQueryParams( url, queryParams ) {
+    let paramsUrl = url + '?';
+
+    for( const param in queryParams ) {
+      paramsUrl += `${ param }=${ queryParams[ param ] }&`;
+    }
+
+    return paramsUrl.slice( 0, -1 );
+  }
+
   defineMethodType( method ) {
     if( METHOD_TYPES.USE_BODY.METHODS.includes( method ) ) {
       return METHOD_TYPES.USE_BODY.NAME;
@@ -55,16 +65,6 @@ module.exports.RequestParameters = class {
 
   insertUrlId( id ) {
     return this.requestMetadata.url.replace( queryIdTempalate, id );
-  }
-
-  insertQueryParams( url, queryParams ) {
-    let paramsUrl = url + '?';
-
-    for( const param in queryParams ) {
-      paramsUrl += `${ param }=${ queryParams[ param ] }&`;
-    }
-
-    return paramsUrl.slice( 0, -1 );
   }
 
 };
