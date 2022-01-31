@@ -18,7 +18,7 @@ module.exports.ServiceFactory = class {
   }
 
   getServiceName( apiModuleName ) {
-    return apiModuleName.charAt( 0 ).toUpperCase() + apiModuleName.slice( 1 ) + 'Service';
+    return apiModuleName + 'Service';
   }
 
   generateService( apiModuleName, apiModuleSchema ) {

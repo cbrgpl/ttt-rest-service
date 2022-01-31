@@ -9,7 +9,8 @@ const API = {
       method: 'POST',
       url: '/auth/login',
       secure: false,
-      useBody: true,
+      handler: 'login',
+      roles: [],
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -29,14 +30,14 @@ const API = {
           }
         }
       },
-      handler: 'login',
-      roles: []
+
     },
     {
       method: 'GET',
       url: '/auth/logout/{{id}}',
       secure: true,
-      useBody: false,
+      handler: 'logout',
+      roles: [ 'user' ],
       headers: {
         Accept: 'application/json',
         Credentials: 'include'
@@ -44,22 +45,37 @@ const API = {
       schema: {
         // ...
       },
-      handler: 'logout',
-      roles: [ 'user' ]
     },
-    {
-      method: 'POST',
-      url: '/auth/registrate',
-      secure: false,
-      useBody: true,
-      schema: {
-        // ...
-      },
-      handler: 'registrate',
-      roles: []
-    }
   ],
 };
+
+const authModule = [
+  {
+    method: 'POST',
+    url: '/auth/login',
+    secure: false,
+    handler: 'login',
+    roles: [],
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    schema: {
+      type: 'object',
+      required: [ 'username', 'password' ],
+      properties: {
+        username: {
+          type: 'string',
+          minLength: 3
+        },
+        password: {
+          type: 'string',
+          minLength: 6
+        }
+      },
+    },
+  },
+];
 
 async function test() {
   const mimeParserPairs = [
