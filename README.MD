@@ -1,4 +1,4 @@
-# rest-service
+# ttt-rest-service
 
 JS Library which gives functionallity to create services for client-server communication with REST style
 
@@ -22,7 +22,7 @@ Use composite classes to create your own service if default Service does not ful
 
 # Installation
 
-`npm i --save rest-service`
+`npm i --save ttt-rest-service`
 
 <br><br><br><br>
 
@@ -39,13 +39,13 @@ import {
   Service,
   FetcherFactory,
   ServiceFactory
-} from 'rest-service'
+} from 'ttt-rest-service'
 
 import {
   ValidationError,
   StatusError,
   MimeError
-} from 'rest-service/dist/errors'
+} from 'ttt-rest-service/dist/errors'
 
 // then look at one of example below
 ```
@@ -147,7 +147,7 @@ const authApiModule = [
 
 ## MimeParser && ResponseProcessor:
 ```js
-const { MimeParser, ResponseProcessor } = require("rest-service")
+const { MimeParser, ResponseProcessor } = require("ttt-rest-service")
 
 const mimeParserPairs = [
     [ 'application/json', ( httpResponse ) => httpResponse.json() ]
@@ -166,7 +166,7 @@ example()
 
 ## Fetcher
 ```js
-const { FetcherFactory } = require('rest-service')
+const { FetcherFactory } = require('ttt-rest-service')
 
 const authModule = [
   {
@@ -223,7 +223,7 @@ example()
 ## Service
 
 ```js
-const { Service, fetcherFactory, mimeParser, responseProcessor } = require('rest-service')
+const { Service, fetcherFactory, mimeParser, responseProcessor } = require('ttt-rest-service')
 
 const authModule = [
   {
@@ -300,7 +300,7 @@ async function exampleWithSpecifiedHandler() {
 ## ServiceFactory
 
 ```js
-const { ServiceFactory, FetcherFactory, MimeParser, ResponseProcessor } = require('rest-service')
+const { ServiceFactory, FetcherFactory, MimeParser, ResponseProcessor } = require('ttt-rest-service')
 
 const API = {
     auth: [

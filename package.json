@@ -1,5 +1,5 @@
 {
-  "name": "rest-service",
+  "name": "ttt-rest-service",
   "version": "1.0.0",
   "description": "web services for making request with RESTfull API",
   "browser": "dist/index.js",
@@ -16,13 +16,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/cbrgpl/rest-service"
+    "url": "https://github.com/cbrgpl/ttt-rest-service"
   },
   "bugs": {
-    "url": "https://github.com/cbrgpl/rest-service/issues",
+    "url": "https://github.com/cbrgpl/ttt-rest-service/issues",
     "email": "tttcbrg@gmail.com"
   },
-  "homepage": "https://github.com/cbrgpl/rest-service",
+  "homepage": "https://github.com/cbrgpl/ttt-rest-service",
   "scripts": {
     "start": "node libs/index.js",
     "build": "webpack --env production --progress --watch --config-name main --config webpack.config.js",
