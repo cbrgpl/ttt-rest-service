@@ -20,8 +20,8 @@ module.exports = function ( env, argv ) {
   var config = {
     name: 'main',
     entry: {
-      'dist/rest-service': './libs/index.js',
-      'dist/rest-service.min': './libs/index.js',
+      'dist/index': './bundle.js',
+      'dist/errors/index': './errorsBundle.js'
     },
     output: {
       path: __dirname,
@@ -38,7 +38,7 @@ module.exports = function ( env, argv ) {
       minimize: env.production,
       minimizer: [
         new terserPlugin( {
-          include: /\.min\.js$/,
+          // include: /\.min\.js$/,
           terserOptions: {
             sourceMap: env.production,
             format: {
@@ -48,7 +48,8 @@ module.exports = function ( env, argv ) {
             }
           },
           extractComments: false
-        } ), new terserPlugin( {
+        } ),
+        new terserPlugin( {
           exclude: /\.min\.js$/,
           terserOptions: {
             sourceMap: !env.production,

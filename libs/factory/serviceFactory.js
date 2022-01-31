@@ -1,4 +1,4 @@
-const { Service } = require( './../service' );
+const { Service } = require( './../service/service' );
 
 module.exports.ServiceFactory = class {
   constructor(  fetcherFactory = null, responseProcessor = null ) {

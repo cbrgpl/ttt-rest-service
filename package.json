@@ -1,8 +1,8 @@
 {
   "name": "rest-service",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "description": "web services for making request with RESTfull API",
-  "browser": "dist/rest-service.js",
+  "browser": "dist/index.js",
   "author": {
     "name": "cbrgpl",
     "email": "tttcbrg@gmail.com"
@@ -10,7 +10,8 @@
   "license": "MIT",
   "keywords": [
     "rest",
-    "web",
+    "api",
+    "client",
     "service"
   ],
   "repository": {

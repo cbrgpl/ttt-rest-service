@@ -14,6 +14,7 @@ Library provides:
         - ServiceFactory
 
 Use composite classes to create your own service if default Service does not fulfill the needs
+
 <br><br><br><br>
 
 
@@ -22,14 +23,33 @@ Use composite classes to create your own service if default Service does not ful
 # Installation
 
 `npm i --save rest-service`
+
 <br><br><br><br>
 
 
 
 
 # Getting Started
+
 ```js
+import {
+  Fetcher,
+  MimeParser,
+  ResponseProcessor,
+  Service,
+  FetcherFactory,
+  ServiceFactory
+} from 'rest-service'
+
+import {
+  ValidationError,
+  StatusError,
+  MimeError
+} from 'rest-service/dist/errors'
+
+// then look at one of example below
 ```
+
 <br><br><br><br>
 
 
@@ -534,7 +554,7 @@ else returns passed `httpResponse`
 | --- | --- | --- | --- |
 | apiModuleName | string | undefined | Name of module which will be set as name of a service |
 | apiModuleSchema | object | undefined | The metadata of endpoint |
-<br><br><br>
 
+<br><br><br>
 
 [^mapable]: mapable means array which can be used for creating of map

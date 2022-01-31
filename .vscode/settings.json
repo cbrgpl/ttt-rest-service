@@ -1,0 +1,71 @@
+{
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.quickSuggestions": {
+        "strings": true
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[vue]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[scss]": {
+        "editor.defaultFormatter": "stylelint.vscode-stylelint"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "stylelint.vscode-stylelint"
+    },
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true,
+        "source.fixAll.stylelint": true
+    },
+    "eslint.alwaysShowStatus": true,
+    "eslint.options": {
+        "extensions": [
+            ".html",
+            ".js",
+            ".ts",
+            ".vue"
+        ]
+    },
+    "vetur.validation.template": false,
+    "vetur.validation.style": false,
+    "vetur.format.defaultFormatter.html": "none",
+    "vetur.format.defaultFormatter.css": "none",
+    "vetur.format.defaultFormatter.scss": "none",
+    "vetur.format.defaultFormatter.js": "none",
+    "vetur.format.defaultFormatter.ts": "none",
+    "vetur.completion.scaffoldSnippetSources": {
+        "workspace": "💼", // Suffix workspace snippets with `💼`
+    },
+    "stylelint.enable": true,
+    "css.validate": true,
+    "scss.validate": true,
+    "html.format.enable": false,
+    "emmet.triggerExpansionOnTab": true,
+    "emmet.includeLanguages": {
+        "vue-html": "html"
+    },
+    "files.exclude": {
+        "**/*.log": true,
+        "**/*.log*": true,
+        "**/dist": true,
+    },
+    "files.associations": {
+        ".babelrc": "jsonc",
+        ".eslintrc": "jsonc",
+        ".markdownlintrc": "jsonc",
+        "*.config.js": "javascript",
+        "*.spec.js": "javascript",
+        "*.vue": "vue"
+    },
+    "files.eol": "\n",
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "tailwindCSS.emmetCompletions": true,
+    "jest.jestCommandLine": "npm run test --",
+}
