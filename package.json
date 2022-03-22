@@ -1,6 +1,6 @@
 {
   "name": "ttt-rest-service",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "web services for making request with RESTfull API",
   "browser": "dist/index.js",
   "author": {

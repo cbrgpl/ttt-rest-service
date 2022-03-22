@@ -55,7 +55,7 @@ function getRequestParameters( testRequestMetadata ) {
 
 test( 'Request Parameters - prepareBodyRequest(defaultRequestParams, data)', () => {
   const expectedResult = {
-    url: '/auth/login/',
+    url: null,
     fetchParams: {
       method: 'POST',
       headers: {

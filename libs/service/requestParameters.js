@@ -33,7 +33,6 @@ module.exports.RequestParameters = class {
   }
 
   prepareUseBodyRequest( defaultRequestParams, data ) {
-    defaultRequestParams.url = this.requestMetadata.url;
     defaultRequestParams.fetchParams.body = data;
 
     return defaultRequestParams;
