@@ -1,7 +1,7 @@
 const { ajv } = require( './../helper/ajv' );
 
 const { ValidationError } = require( './../error/validationError' );
-const { Hookable } = require( './Hookable' );
+const { Hookable } = require( './hookable' );
 
 const { defaultHook } = require( './../helper/defaultHook' );
 

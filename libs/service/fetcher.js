@@ -1,4 +1,4 @@
-const { Hookable } = require( './Hookable' );
+const { Hookable } = require( './hookable' );
 const { defaultHook } = require( './../helper/defaultHook' );
 const mapableArrayOfHooks =  [
   [ 'beforeFetch', defaultHook ]
