@@ -1,7 +1,7 @@
-const { Service } = require( './../../libs/service/service' );
-const { ValidationError } = require( './../../libs/error/validationError' );
+import { Service } from './../../lib/service/service';
+import { ValidationError } from './../../lib/error/validationError';
 
-const { getFunctionResult, getFunctionCaller } = require( './../__utils__' );
+import { getFunctionResult, getFunctionCaller } from '../__utils__';
 
 const getService = ( fetcher, responseProcessor, name ) => {
   return new Service( fetcher, responseProcessor, name );
@@ -171,15 +171,13 @@ test( 'Service - request({existingHandlerName, data, id}) test hooks ', async ()
       id: 'id_1'
     },
     responseHandledArgs: {
-      handledResponse: {
-        handlerName: 'req1',
-        data: {
-          prop1: 'prop1'
-        },
-        id: 'id_1',
-        fetched: true,
-        processed: true
-      }
+      handlerName: 'req1',
+      data: {
+        prop1: 'prop1'
+      },
+      id: 'id_1',
+      fetched: true,
+      processed: true
     },
   };
 

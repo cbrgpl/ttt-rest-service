@@ -5,6 +5,9 @@
       "es2020": true,
       "node": true
     },
+    "parserOptions": {
+      "sourceType": "module",
+    },
     "extends": [
       "plugin:import/errors",
       "plugin:import/warnings",

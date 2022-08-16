@@ -50,8 +50,8 @@
         "vue-html": "html"
     },
     "files.exclude": {
-        "**/*.log": true,
-        "**/*.log*": true,
+        "**/*.log": false,
+        "**/*.log*": false
     },
     "files.associations": {
         ".babelrc": "jsonc",
@@ -67,4 +67,7 @@
     "files.trimTrailingWhitespace": true,
     "tailwindCSS.emmetCompletions": true,
     "jest.jestCommandLine": "npm run test --",
+    "marquee.widgets.npm-stats.packageNames": [
+        "ttt-rest-service"
+    ],
 }

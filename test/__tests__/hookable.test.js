@@ -1,6 +1,5 @@
-const { Hookable } = require( '../../libs/service/hookable.js' );
-
-const { getFunctionCaller, getFunctionResult } = require( '../__utils__' );
+import { Hookable } from '../../lib/service/hookable.js';
+import { getFunctionResult, getFunctionCaller } from '../__utils__';
 
 const defaultHook = ( val ) => val;
 const testMapableArray = [
@@ -55,6 +54,6 @@ test( 'Hookable - вадация коллбека не являющегося ф
     const testHookable = createTestHookable( testMapableArray );
     const exampleNotFunction = true;
 
-    testHookable.validateHook( exampleNotFunction );
-  } ) ).toThrow( 'Hook callback must be an function' );
+    testHookable.validateHookCallback( exampleNotFunction );
+  } ) ).toThrow( 'Hook callback must be a function' );
 } );

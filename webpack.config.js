@@ -20,16 +20,16 @@ module.exports = function ( env, argv ) {
   var config = {
     name: 'main',
     entry: {
-      'dist/index': './bundle.js',
-      'dist/errors/index': './errorsBundle.js'
+      'dist/index': './bundles/index.js',
+      'dist/errors/index': './bundles/errors.js'
     },
     output: {
       path: __dirname,
       filename: '[name].js',
       library: {
+        name: 'ttt-rest-service',
         type: 'umd'
       },
-      globalObject: 'this'
     },
     externals: {
       'window': 'window'

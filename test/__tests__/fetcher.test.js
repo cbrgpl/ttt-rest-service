@@ -1,6 +1,5 @@
-const { Fetcher } = require( '../../libs/service/fetcher.js' );
-
-const { getFunctionResult, getFunctionCaller } = require( '../__utils__' );
+import { Fetcher } from '../../lib/service/fetcher.js';
+import { getFunctionResult, getFunctionCaller } from '../__utils__';
 
 globalThis.fetch = jest.fn();
 

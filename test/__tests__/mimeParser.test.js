@@ -1,7 +1,9 @@
-const { MimeParser } = require( './../../libs/service/mimeParser' );
-const { MimeError } = require( './../../libs/error/mimeError' );
-const { NO_CONTENT_TYPE } = require( './../../libs/enum/consts' );
-const { getFunctionCaller, getFunctionResult } = require( './../__utils__' );
+import { MimeParser } from './../../lib/service/mimeParser';
+import { MimeError } from './../../lib/error/mimeError';
+import { NO_CONTENT_TYPE } from './../../lib/enum/consts';
+
+import { getFunctionResult, getFunctionCaller } from '../__utils__';
+
 
 const mimeParserPairs = [
   [ 'application/json', ( httpResponse ) => 'application/json ' + httpResponse.data ]
@@ -31,7 +33,7 @@ test( 'Mime Parser - validateMimeParsers( invalidPairs )', () => {
     ];
 
     mimeParser.validateMimeParsers( testMimeParserPairs );
-  } ) ).toThrow( 'MIME type parser for app/json must be an function' );
+  } ) ).toThrow( 'MIME type parser for app/json must be type of function' );
 } );
 
 test( 'Mime Parser - getMimeParser( existMimeType )', () => {
@@ -86,7 +88,7 @@ test( 'Mime Parser - defineMimeType( notExistHeaderObject )', () => {
     const fakeHttpResponse = {};
 
     return mimeParser.defineMimeType( fakeHttpResponse );
-  } ) ).toThrow( 'httpResponse argument does not have headers property\nDo you sure you passed instance of Response?' );
+  } ) ).toThrow( 'Response does not have headers property\nDo you sure you passed instance of Response?' );
 } );
 
 
