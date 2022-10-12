@@ -1,6 +1,6 @@
 {
   "name": "ttt-rest-service",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "web services for making request with RESTfull API",
   "author": {
     "name": "cbrgpl",
